@@ -1,0 +1,22 @@
+{
+  "name": "extractor",
+  "private": true,
+  "version": "0.0.1",
+  "main": "./dist/extractor.cjs",
+  "exports": {
+    ".": {
+      "require": "./dist/extractor.cjs"
+    }
+  },
+  "scripts": {
+    "build": "bun test && esbuild src/index.ts --minify --bundle --platform=node --outfile=dist/extractor.cjs",
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.6",
+    "@types/jmespath": "^0.15.1",
+    "esbuild": "^0.19.4",
+    "jmespath": "^0.16.0",
+    "typescript": "^5.2.2"
+  }
+}

@@ -1,0 +1,212 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.4.0/github-markdown.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
+    <style>
+      .markdown-body {
+        box-sizing: border-box;
+        min-width: 200px;
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 45px;
+      }
+
+      @media (max-width: 767px) {
+        .markdown-body {
+          padding: 15px;
+        }
+      }
+    </style>
+    <title>k6/x/faker</title>
+  </head>
+  <body class="markdown-body">
+<!-- begin:api -->
+<h1 id="k6-x-faker">k6/x/faker</h1>
+
+<p>xk6-faker random fake data generator</p>
+
+<h2 id="faker">Faker</h2>
+
+<p>This is Faker's main class containing all modules that can be used to generate data.</p>
+
+<p>Please have a look at the individual modules and methods for more information and examples.</p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">import { Faker } from &quot;k6/x/faker&quot;
+
+const faker = new Faker(11)
+
+export default function() {
+  console.log(faker.person.firstName()) // 'Josiah'
+}
+</code></pre>
+
+<h3 id="faker-1">Faker()</h3>
+
+<pre><code class="language-ts">constructor(seed?: int64);
+</code></pre>
+
+<ul>
+<li><code>seed</code> random seed value for deterministic generator</li>
+</ul>
+
+<p>Creates a new instance of Faker.</p>
+
+<p>Optionally, the value of the random seed can be set as a constructor parameter. This is intended to allow for consistent values in a tests, so you might want to use hardcoded values as the seed.</p>
+
+<p>Please note that generated values are dependent on both the seed and the number of calls that have been made.</p>
+
+<p>Setting seed to 0 (or omitting it) will use seed derived from system entropy.</p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const consistentFaker = new Faker(11)
+const semiRandomFaker = new Faker()
+</code></pre>
+
+<h3 id="faker-person">Faker.person</h3>
+
+<pre><code class="language-ts">readonly person: Person;
+</code></pre>
+
+<p>Module to generate people's personal information such as names and job titles.</p>
+
+<h2 id="person">Person</h2>
+
+<p>Module to generate people's personal information such as names and job titles.</p>
+
+<h3 id="person-firstname">Person.firstName()</h3>
+
+<pre><code class="language-ts">firstName(): string;
+</code></pre>
+
+<p>Generates a random first name.</p>
+
+<p><em>Returns a random first name</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.person.firstName() // 'Josiah'
+</code></pre>
+
+<h3 id="person-lastname">Person.lastName()</h3>
+
+<pre><code class="language-ts">lastName(): string;
+</code></pre>
+
+<p>Generates a random last name.</p>
+
+<p><em>Returns a random last name</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.person.lastName() // 'Abshire'
+</code></pre>
+
+<h3 id="person-prefix">Person.prefix()</h3>
+
+<pre><code class="language-ts">prefix(): string;
+</code></pre>
+
+<p>Generates a random person prefix.</p>
+
+<p><em>Returns a random person prefix.</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.person.prefix() // 'Mr.'
+</code></pre>
+
+<h3 id="person-suffix">Person.suffix()</h3>
+
+<pre><code class="language-ts">suffix(): string;
+</code></pre>
+
+<p>Generates a random person suffix.</p>
+
+<p><em>Returns a random person suffix</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.person.suffix() // 'Sr.'
+</code></pre>
+
+<h3 id="person-sextype">Person.sexType()</h3>
+
+<pre><code class="language-ts">sexType(): string;
+</code></pre>
+
+<p>Generates a random sex type.</p>
+
+<p><em>Returns a random sex type <code>male</code>|<code>female</code></em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.person.sexType() // 'male'
+</code></pre>
+
+<h3 id="person-jobtitle">Person.jobTitle()</h3>
+
+<pre><code class="language-ts">jobTitle(): string;
+</code></pre>
+
+<p>Generates a random job title.</p>
+
+<p><em>Returns a random job title</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.person.jobTitle() // 'Representative'
+</code></pre>
+
+<h3 id="person-joblevel">Person.jobLevel()</h3>
+
+<pre><code class="language-ts">jobLevel(): string;
+</code></pre>
+
+<p>Generates a random job level.</p>
+
+<p><em>Returns a random job level</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.person.jobLevel() // 'Identity'
+</code></pre>
+
+<h3 id="person-jobdescriptor">Person.jobDescriptor()</h3>
+
+<pre><code class="language-ts">jobDescriptor(): string;
+</code></pre>
+
+<p>Generates a random job descriptor.</p>
+
+<p><em>Returns a random job descriptor</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.person.jobDescriptor() // 'Internal'
+</code></pre>
+<!-- end:api -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  </body>
+</html>

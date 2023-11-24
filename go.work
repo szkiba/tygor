@@ -1,0 +1,9 @@
+go 1.21
+
+use (
+	.
+	./examples/faker
+	./examples/hitchhiker
+	./examples/state
+	./examples/toml
+)

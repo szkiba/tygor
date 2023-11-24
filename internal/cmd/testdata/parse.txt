@@ -1,0 +1,8 @@
+Usage:
+  tygor parse file [flags]
+
+Examples:
+$ tygor parse hitchhiker.d.ts | jq
+
+Flags:
+  -o, --output string   output file (default: standard output)

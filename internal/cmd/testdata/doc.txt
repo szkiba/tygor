@@ -1,0 +1,12 @@
+Usage:
+  tygor doc file [flags]
+
+Examples:
+$ tygor doc -o README.md hitchhiker.d.ts
+
+Flags:
+      --heading uint      initial heading level (default 1)
+      --html              enable HTML output (default: based on file ext)
+  -i, --inject string     inject into outer file
+  -o, --output string     output file (default: standard output)
+  -t, --template string   go template file for markdown generation

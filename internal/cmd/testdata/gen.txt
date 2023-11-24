@@ -1,0 +1,10 @@
+Usage:
+  tygor gen file [flags]
+
+Examples:
+$ tygor gen --skeleton hitchhiker.d.ts
+
+Flags:
+  -o, --output string    output directory (default: same as input)
+  -p, --package string   go package name (default: module name)
+  -s, --skeleton         enable skeleton generation (default: disabled)

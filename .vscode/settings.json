@@ -1,0 +1,14 @@
+{
+  "go.lintTool": "golangci-lint",
+  "go.lintFlags": ["--fast"],
+  "go.formatTool": "golines",
+  "go.buildTags": "mage",
+  "favorites.resources": [
+    {
+      "filePath": "internal/idl/extractor",
+      "group": "Default"
+    }
+  ],
+  "jestrunner.jestCommand": "bun test",
+  "prettier.printWidth": 128
+}
