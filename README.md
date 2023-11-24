@@ -51,7 +51,7 @@ type goGuide interface {
   checkMethod(valueArg int) (bool, error)
   questionGetter() (string, error)
   questionSetter(v string) error
-  answerGetter() (int, error) (int, error)
+  answerGetter() (int, error)
 }
 
 type goModule interface { 
