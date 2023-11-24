@@ -432,8 +432,6 @@ Currently, tygor is still in a relatively early stage of development. Many featu
 
 The generator subcommands generate output in different formats from the API model.
 
-Currently, the implementation of the [`parse`](#tygor-parse) and [`gen`](#tygor-gen) generator subcommands has been completed. The `doc` subcommand (markdown API documentation generation) will also be implemented soon.
-
 **doc**
 
 The [`doc`](#tygor-doc) subcommand generates Markdown/HTML documentation from the API model. The generation is done using go template. The [slim-sprig](https://github.com/go-task/slim-sprig) template function library used in the template. The generated Markdown text will be formatted using [blackfriday](https://github.com/russross/blackfriday) (with [markdownfmt](https://github.com/shurcooL/markdownfmt) as renderer). The HTML output is generated from the markdown output using [blackfriday](https://github.com/russross/blackfriday).
