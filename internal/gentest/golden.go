@@ -91,7 +91,8 @@ func GoldenDoc(t *testing.T, filename string) {
 			t.Error(err)
 		}
 
-		return string(data)
+		// windows workaround
+		return string(bytes.ReplaceAll(data, []byte{'\r', '\n'}, []byte{'\n'}))
 	}
 
 	golden(t, filepath.Join(dir, "README.md"), must(doc.Generate(mod)))
