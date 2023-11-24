@@ -24,8 +24,6 @@ jobs:
       # BEGIN: intro
       - name: Ensure intro dir exists
         run: mkdir -p build/docs/intro
-      - name: Copy intro images
-        run: cp docs/intro/*.svg build/docs/intro/
       - name: Marp Build (HTML)
         uses: docker://marpteam/marp-cli:v3.2.0
         with:
