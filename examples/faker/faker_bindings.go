@@ -116,8 +116,32 @@ type jsFaker interface {
 	// personGetter is the go getter binding for the JavaScript person property.
 	//
 	// TSDoc:
-	// Module to generate people's personal information such as names and job titles.
+	// API to generate people's personal information such as names and job titles.
 	personGetter(call goja.FunctionCall, vm *goja.Runtime) goja.Value
+
+	// companyGetter is the go getter binding for the JavaScript company property.
+	//
+	// TSDoc:
+	// API to generate company related entries.
+	companyGetter(call goja.FunctionCall, vm *goja.Runtime) goja.Value
+
+	// hackerGetter is the go getter binding for the JavaScript hacker property.
+	//
+	// TSDoc:
+	// API to generate hacker/IT words and phrases.
+	hackerGetter(call goja.FunctionCall, vm *goja.Runtime) goja.Value
+
+	// hipsterGetter is the go getter binding for the JavaScript hipster property.
+	//
+	// TSDoc:
+	// API to generate hipster words, phrases and paragraphs.
+	hipsterGetter(call goja.FunctionCall, vm *goja.Runtime) goja.Value
+
+	// loremGetter is the go getter binding for the JavaScript lorem property.
+	//
+	// TSDoc:
+	// API to generate random words, sentences, paragraphs, questions and quotes.
+	loremGetter(call goja.FunctionCall, vm *goja.Runtime) goja.Value
 }
 
 // goFaker is the go representation of the JavaScript Faker type.
@@ -130,8 +154,32 @@ type goFaker interface {
 	// personGetter is the go getter method for the person property.
 	//
 	// TSDoc:
-	// Module to generate people's personal information such as names and job titles.
+	// API to generate people's personal information such as names and job titles.
 	personGetter() (goPerson, error)
+
+	// companyGetter is the go getter method for the company property.
+	//
+	// TSDoc:
+	// API to generate company related entries.
+	companyGetter() (goCompany, error)
+
+	// hackerGetter is the go getter method for the hacker property.
+	//
+	// TSDoc:
+	// API to generate hacker/IT words and phrases.
+	hackerGetter() (goHacker, error)
+
+	// hipsterGetter is the go getter method for the hipster property.
+	//
+	// TSDoc:
+	// API to generate hipster words, phrases and paragraphs.
+	hipsterGetter() (goHipster, error)
+
+	// loremGetter is the go getter method for the lorem property.
+	//
+	// TSDoc:
+	// API to generate random words, sentences, paragraphs, questions and quotes.
+	loremGetter() (goLorem, error)
 }
 
 // jsFakerAdapter converts goFaker to jsFaker.
@@ -151,6 +199,46 @@ func (self *jsFakerAdapter) personGetter(call goja.FunctionCall, vm *goja.Runtim
 	return goPersonToObject(v, vm)
 }
 
+// companyGetter is a jsFaker property getter adapter method.
+func (self *jsFakerAdapter) companyGetter(call goja.FunctionCall, vm *goja.Runtime) goja.Value {
+	v, err := self.adaptee.companyGetter()
+	if err != nil {
+		panic(err)
+	}
+
+	return goCompanyToObject(v, vm)
+}
+
+// hackerGetter is a jsFaker property getter adapter method.
+func (self *jsFakerAdapter) hackerGetter(call goja.FunctionCall, vm *goja.Runtime) goja.Value {
+	v, err := self.adaptee.hackerGetter()
+	if err != nil {
+		panic(err)
+	}
+
+	return goHackerToObject(v, vm)
+}
+
+// hipsterGetter is a jsFaker property getter adapter method.
+func (self *jsFakerAdapter) hipsterGetter(call goja.FunctionCall, vm *goja.Runtime) goja.Value {
+	v, err := self.adaptee.hipsterGetter()
+	if err != nil {
+		panic(err)
+	}
+
+	return goHipsterToObject(v, vm)
+}
+
+// loremGetter is a jsFaker property getter adapter method.
+func (self *jsFakerAdapter) loremGetter(call goja.FunctionCall, vm *goja.Runtime) goja.Value {
+	v, err := self.adaptee.loremGetter()
+	if err != nil {
+		panic(err)
+	}
+
+	return goLoremToObject(v, vm)
+}
+
 // goFakerAdapter converts goja Object to goFaker.
 type goFakerAdapter struct {
 	adaptee *goja.Object
@@ -164,9 +252,45 @@ func (self *goFakerAdapter) personGetter() (goPerson, error) {
 	return self.adaptee.Get("person").Export().(goPerson), nil
 }
 
+// companyGetter is a goFaker property getter adapter method.
+func (self *goFakerAdapter) companyGetter() (goCompany, error) {
+	return self.adaptee.Get("company").Export().(goCompany), nil
+}
+
+// hackerGetter is a goFaker property getter adapter method.
+func (self *goFakerAdapter) hackerGetter() (goHacker, error) {
+	return self.adaptee.Get("hacker").Export().(goHacker), nil
+}
+
+// hipsterGetter is a goFaker property getter adapter method.
+func (self *goFakerAdapter) hipsterGetter() (goHipster, error) {
+	return self.adaptee.Get("hipster").Export().(goHipster), nil
+}
+
+// loremGetter is a goFaker property getter adapter method.
+func (self *goFakerAdapter) loremGetter() (goLorem, error) {
+	return self.adaptee.Get("lorem").Export().(goLorem), nil
+}
+
 // jsFakerTo setup Faker JavaScript object from jsFaker.
 func jsFakerTo(src jsFaker, obj *goja.Object, vm *goja.Runtime) error {
-	return obj.DefineAccessorProperty("person", vm.ToValue(src.personGetter), goja.Undefined(), goja.FLAG_FALSE, goja.FLAG_TRUE)
+	if err := obj.DefineAccessorProperty("person", vm.ToValue(src.personGetter), goja.Undefined(), goja.FLAG_FALSE, goja.FLAG_TRUE); err != nil {
+		return err
+	}
+
+	if err := obj.DefineAccessorProperty("company", vm.ToValue(src.companyGetter), goja.Undefined(), goja.FLAG_FALSE, goja.FLAG_TRUE); err != nil {
+		return err
+	}
+
+	if err := obj.DefineAccessorProperty("hacker", vm.ToValue(src.hackerGetter), goja.Undefined(), goja.FLAG_FALSE, goja.FLAG_TRUE); err != nil {
+		return err
+	}
+
+	if err := obj.DefineAccessorProperty("hipster", vm.ToValue(src.hipsterGetter), goja.Undefined(), goja.FLAG_FALSE, goja.FLAG_TRUE); err != nil {
+		return err
+	}
+
+	return obj.DefineAccessorProperty("lorem", vm.ToValue(src.loremGetter), goja.Undefined(), goja.FLAG_FALSE, goja.FLAG_TRUE)
 }
 
 // jsFakerFrom returns a jsFaker based on a goFaker.
@@ -215,7 +339,7 @@ func newFakerConstructor(ctor goFakerConstructor) func(call goja.ConstructorCall
 // jsPerson is the go binding for the JavaScript Person type.
 //
 // TSDoc:
-// Module to generate people's personal information such as names and job titles.
+// API to generate people's personal information such as names and job titles.
 type jsPerson interface {
 	// firstNameMethod is the go binding for the JavaScript firstName method.
 	//
@@ -269,7 +393,7 @@ type jsPerson interface {
 // goPerson is the go representation of the JavaScript Person type.
 //
 // TSDoc:
-// Module to generate people's personal information such as names and job titles.
+// API to generate people's personal information such as names and job titles.
 type goPerson interface {
 	// firstNameMethod is the go representation of the firstName method.
 	//
@@ -583,6 +707,944 @@ func goPersonToObject(v goPerson, vm *goja.Runtime) *goja.Object {
 	obj := vm.NewObject()
 
 	err := jsPersonTo(jsPersonFrom(v), obj, vm)
+	if err != nil {
+		panic(err)
+	}
+
+	return obj
+}
+
+// jsCompany is the go binding for the JavaScript Company type.
+//
+// TSDoc:
+// API to generate company related entries.
+type jsCompany interface {
+	// nameMethod is the go binding for the JavaScript name method.
+	//
+	// TSDoc:
+	// Generates a random company name string.
+	nameMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value
+
+	// suffixMethod is the go binding for the JavaScript suffix method.
+	//
+	// TSDoc:
+	// Generates a random company suffix string.
+	suffixMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value
+
+	// buzzWordMethod is the go binding for the JavaScript buzzWord method.
+	//
+	// TSDoc:
+	// Generates a random company buzz word string.
+	buzzWordMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value
+
+	// bsMethod is the go binding for the JavaScript bs method.
+	//
+	// TSDoc:
+	// Generates a random company bs string.
+	bsMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value
+}
+
+// goCompany is the go representation of the JavaScript Company type.
+//
+// TSDoc:
+// API to generate company related entries.
+type goCompany interface {
+	// nameMethod is the go representation of the name method.
+	//
+	// TSDoc:
+	// Generates a random company name string.
+	nameMethod() (string, error)
+
+	// suffixMethod is the go representation of the suffix method.
+	//
+	// TSDoc:
+	// Generates a random company suffix string.
+	suffixMethod() (string, error)
+
+	// buzzWordMethod is the go representation of the buzzWord method.
+	//
+	// TSDoc:
+	// Generates a random company buzz word string.
+	buzzWordMethod() (string, error)
+
+	// bsMethod is the go representation of the bs method.
+	//
+	// TSDoc:
+	// Generates a random company bs string.
+	bsMethod() (string, error)
+}
+
+// jsCompanyAdapter converts goCompany to jsCompany.
+type jsCompanyAdapter struct {
+	adaptee goCompany
+}
+
+var _ jsCompany = (*jsCompanyAdapter)(nil)
+
+// nameMethod is a jsCompany adapter method.
+func (self *jsCompanyAdapter) nameMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value {
+	v, err := self.adaptee.nameMethod()
+	if err != nil {
+		panic(err)
+	}
+
+	return vm.ToValue(v)
+}
+
+// suffixMethod is a jsCompany adapter method.
+func (self *jsCompanyAdapter) suffixMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value {
+	v, err := self.adaptee.suffixMethod()
+	if err != nil {
+		panic(err)
+	}
+
+	return vm.ToValue(v)
+}
+
+// buzzWordMethod is a jsCompany adapter method.
+func (self *jsCompanyAdapter) buzzWordMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value {
+	v, err := self.adaptee.buzzWordMethod()
+	if err != nil {
+		panic(err)
+	}
+
+	return vm.ToValue(v)
+}
+
+// bsMethod is a jsCompany adapter method.
+func (self *jsCompanyAdapter) bsMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value {
+	v, err := self.adaptee.bsMethod()
+	if err != nil {
+		panic(err)
+	}
+
+	return vm.ToValue(v)
+}
+
+// goCompanyAdapter converts goja Object to goCompany.
+type goCompanyAdapter struct {
+	adaptee *goja.Object
+	vm      *goja.Runtime
+}
+
+var _ goCompany = (*goCompanyAdapter)(nil)
+
+// nameMethod is a name adapter method.
+func (self *goCompanyAdapter) nameMethod() (string, error) {
+	fun, ok := goja.AssertFunction(self.adaptee.Get("name"))
+	if !ok {
+		return "", fmt.Errorf("%w: name", errors.ErrUnsupported)
+	}
+
+	res, err := fun(self.adaptee)
+	if err != nil {
+		return "", err
+	}
+
+	return res.String(), nil
+}
+
+// suffixMethod is a suffix adapter method.
+func (self *goCompanyAdapter) suffixMethod() (string, error) {
+	fun, ok := goja.AssertFunction(self.adaptee.Get("suffix"))
+	if !ok {
+		return "", fmt.Errorf("%w: suffix", errors.ErrUnsupported)
+	}
+
+	res, err := fun(self.adaptee)
+	if err != nil {
+		return "", err
+	}
+
+	return res.String(), nil
+}
+
+// buzzWordMethod is a buzzWord adapter method.
+func (self *goCompanyAdapter) buzzWordMethod() (string, error) {
+	fun, ok := goja.AssertFunction(self.adaptee.Get("buzzWord"))
+	if !ok {
+		return "", fmt.Errorf("%w: buzzWord", errors.ErrUnsupported)
+	}
+
+	res, err := fun(self.adaptee)
+	if err != nil {
+		return "", err
+	}
+
+	return res.String(), nil
+}
+
+// bsMethod is a bs adapter method.
+func (self *goCompanyAdapter) bsMethod() (string, error) {
+	fun, ok := goja.AssertFunction(self.adaptee.Get("bs"))
+	if !ok {
+		return "", fmt.Errorf("%w: bs", errors.ErrUnsupported)
+	}
+
+	res, err := fun(self.adaptee)
+	if err != nil {
+		return "", err
+	}
+
+	return res.String(), nil
+}
+
+// jsCompanyTo setup Company JavaScript object from jsCompany.
+func jsCompanyTo(src jsCompany, obj *goja.Object, vm *goja.Runtime) error {
+	if err := obj.Set("name", src.nameMethod); err != nil {
+		return err
+	}
+
+	if err := obj.Set("suffix", src.suffixMethod); err != nil {
+		return err
+	}
+
+	if err := obj.Set("buzzWord", src.buzzWordMethod); err != nil {
+		return err
+	}
+
+	return obj.Set("bs", src.bsMethod)
+}
+
+// jsCompanyFrom returns a jsCompany based on a goCompany.
+func jsCompanyFrom(adaptee goCompany) jsCompany {
+	return &jsCompanyAdapter{adaptee: adaptee}
+}
+
+// goCompanyFrom returns a goCompany from goja Object.
+func goCompanyFrom(adaptee *goja.Object, vm *goja.Runtime) goCompany {
+	return &goCompanyAdapter{adaptee: adaptee, vm: vm}
+}
+
+// goCompanyToObject returns a goja Object from goCompany.
+func goCompanyToObject(v goCompany, vm *goja.Runtime) *goja.Object {
+	obj := vm.NewObject()
+
+	err := jsCompanyTo(jsCompanyFrom(v), obj, vm)
+	if err != nil {
+		panic(err)
+	}
+
+	return obj
+}
+
+// jsHacker is the go binding for the JavaScript Hacker type.
+//
+// TSDoc:
+// API to generate hacker/IT words and phrases.
+type jsHacker interface {
+	// abbreviationMethod is the go binding for the JavaScript abbreviation method.
+	//
+	// TSDoc:
+	// Generates a random hacker/IT abbreviation.
+	abbreviationMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value
+
+	// adjectiveMethod is the go binding for the JavaScript adjective method.
+	//
+	// TSDoc:
+	// Generates a random hacker/IT adjective.
+	adjectiveMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value
+
+	// ingverbMethod is the go binding for the JavaScript ingverb method.
+	//
+	// TSDoc:
+	// Generates a random hacker/IT verb for continuous actions (en: ing suffix; e.g. hacking).
+	ingverbMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value
+
+	// nounMethod is the go binding for the JavaScript noun method.
+	//
+	// TSDoc:
+	// Generates a random hacker/IT noun.
+	nounMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value
+
+	// phraseMethod is the go binding for the JavaScript phrase method.
+	//
+	// TSDoc:
+	// Generates a random hacker/IT phrase.
+	phraseMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value
+
+	// verbMethod is the go binding for the JavaScript verb method.
+	//
+	// TSDoc:
+	// Generates a random hacker/IT verb.
+	verbMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value
+}
+
+// goHacker is the go representation of the JavaScript Hacker type.
+//
+// TSDoc:
+// API to generate hacker/IT words and phrases.
+type goHacker interface {
+	// abbreviationMethod is the go representation of the abbreviation method.
+	//
+	// TSDoc:
+	// Generates a random hacker/IT abbreviation.
+	abbreviationMethod() (string, error)
+
+	// adjectiveMethod is the go representation of the adjective method.
+	//
+	// TSDoc:
+	// Generates a random hacker/IT adjective.
+	adjectiveMethod() (string, error)
+
+	// ingverbMethod is the go representation of the ingverb method.
+	//
+	// TSDoc:
+	// Generates a random hacker/IT verb for continuous actions (en: ing suffix; e.g. hacking).
+	ingverbMethod() (string, error)
+
+	// nounMethod is the go representation of the noun method.
+	//
+	// TSDoc:
+	// Generates a random hacker/IT noun.
+	nounMethod() (string, error)
+
+	// phraseMethod is the go representation of the phrase method.
+	//
+	// TSDoc:
+	// Generates a random hacker/IT phrase.
+	phraseMethod() (string, error)
+
+	// verbMethod is the go representation of the verb method.
+	//
+	// TSDoc:
+	// Generates a random hacker/IT verb.
+	verbMethod() (string, error)
+}
+
+// jsHackerAdapter converts goHacker to jsHacker.
+type jsHackerAdapter struct {
+	adaptee goHacker
+}
+
+var _ jsHacker = (*jsHackerAdapter)(nil)
+
+// abbreviationMethod is a jsHacker adapter method.
+func (self *jsHackerAdapter) abbreviationMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value {
+	v, err := self.adaptee.abbreviationMethod()
+	if err != nil {
+		panic(err)
+	}
+
+	return vm.ToValue(v)
+}
+
+// adjectiveMethod is a jsHacker adapter method.
+func (self *jsHackerAdapter) adjectiveMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value {
+	v, err := self.adaptee.adjectiveMethod()
+	if err != nil {
+		panic(err)
+	}
+
+	return vm.ToValue(v)
+}
+
+// ingverbMethod is a jsHacker adapter method.
+func (self *jsHackerAdapter) ingverbMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value {
+	v, err := self.adaptee.ingverbMethod()
+	if err != nil {
+		panic(err)
+	}
+
+	return vm.ToValue(v)
+}
+
+// nounMethod is a jsHacker adapter method.
+func (self *jsHackerAdapter) nounMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value {
+	v, err := self.adaptee.nounMethod()
+	if err != nil {
+		panic(err)
+	}
+
+	return vm.ToValue(v)
+}
+
+// phraseMethod is a jsHacker adapter method.
+func (self *jsHackerAdapter) phraseMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value {
+	v, err := self.adaptee.phraseMethod()
+	if err != nil {
+		panic(err)
+	}
+
+	return vm.ToValue(v)
+}
+
+// verbMethod is a jsHacker adapter method.
+func (self *jsHackerAdapter) verbMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value {
+	v, err := self.adaptee.verbMethod()
+	if err != nil {
+		panic(err)
+	}
+
+	return vm.ToValue(v)
+}
+
+// goHackerAdapter converts goja Object to goHacker.
+type goHackerAdapter struct {
+	adaptee *goja.Object
+	vm      *goja.Runtime
+}
+
+var _ goHacker = (*goHackerAdapter)(nil)
+
+// abbreviationMethod is a abbreviation adapter method.
+func (self *goHackerAdapter) abbreviationMethod() (string, error) {
+	fun, ok := goja.AssertFunction(self.adaptee.Get("abbreviation"))
+	if !ok {
+		return "", fmt.Errorf("%w: abbreviation", errors.ErrUnsupported)
+	}
+
+	res, err := fun(self.adaptee)
+	if err != nil {
+		return "", err
+	}
+
+	return res.String(), nil
+}
+
+// adjectiveMethod is a adjective adapter method.
+func (self *goHackerAdapter) adjectiveMethod() (string, error) {
+	fun, ok := goja.AssertFunction(self.adaptee.Get("adjective"))
+	if !ok {
+		return "", fmt.Errorf("%w: adjective", errors.ErrUnsupported)
+	}
+
+	res, err := fun(self.adaptee)
+	if err != nil {
+		return "", err
+	}
+
+	return res.String(), nil
+}
+
+// ingverbMethod is a ingverb adapter method.
+func (self *goHackerAdapter) ingverbMethod() (string, error) {
+	fun, ok := goja.AssertFunction(self.adaptee.Get("ingverb"))
+	if !ok {
+		return "", fmt.Errorf("%w: ingverb", errors.ErrUnsupported)
+	}
+
+	res, err := fun(self.adaptee)
+	if err != nil {
+		return "", err
+	}
+
+	return res.String(), nil
+}
+
+// nounMethod is a noun adapter method.
+func (self *goHackerAdapter) nounMethod() (string, error) {
+	fun, ok := goja.AssertFunction(self.adaptee.Get("noun"))
+	if !ok {
+		return "", fmt.Errorf("%w: noun", errors.ErrUnsupported)
+	}
+
+	res, err := fun(self.adaptee)
+	if err != nil {
+		return "", err
+	}
+
+	return res.String(), nil
+}
+
+// phraseMethod is a phrase adapter method.
+func (self *goHackerAdapter) phraseMethod() (string, error) {
+	fun, ok := goja.AssertFunction(self.adaptee.Get("phrase"))
+	if !ok {
+		return "", fmt.Errorf("%w: phrase", errors.ErrUnsupported)
+	}
+
+	res, err := fun(self.adaptee)
+	if err != nil {
+		return "", err
+	}
+
+	return res.String(), nil
+}
+
+// verbMethod is a verb adapter method.
+func (self *goHackerAdapter) verbMethod() (string, error) {
+	fun, ok := goja.AssertFunction(self.adaptee.Get("verb"))
+	if !ok {
+		return "", fmt.Errorf("%w: verb", errors.ErrUnsupported)
+	}
+
+	res, err := fun(self.adaptee)
+	if err != nil {
+		return "", err
+	}
+
+	return res.String(), nil
+}
+
+// jsHackerTo setup Hacker JavaScript object from jsHacker.
+func jsHackerTo(src jsHacker, obj *goja.Object, vm *goja.Runtime) error {
+	if err := obj.Set("abbreviation", src.abbreviationMethod); err != nil {
+		return err
+	}
+
+	if err := obj.Set("adjective", src.adjectiveMethod); err != nil {
+		return err
+	}
+
+	if err := obj.Set("ingverb", src.ingverbMethod); err != nil {
+		return err
+	}
+
+	if err := obj.Set("noun", src.nounMethod); err != nil {
+		return err
+	}
+
+	if err := obj.Set("phrase", src.phraseMethod); err != nil {
+		return err
+	}
+
+	return obj.Set("verb", src.verbMethod)
+}
+
+// jsHackerFrom returns a jsHacker based on a goHacker.
+func jsHackerFrom(adaptee goHacker) jsHacker {
+	return &jsHackerAdapter{adaptee: adaptee}
+}
+
+// goHackerFrom returns a goHacker from goja Object.
+func goHackerFrom(adaptee *goja.Object, vm *goja.Runtime) goHacker {
+	return &goHackerAdapter{adaptee: adaptee, vm: vm}
+}
+
+// goHackerToObject returns a goja Object from goHacker.
+func goHackerToObject(v goHacker, vm *goja.Runtime) *goja.Object {
+	obj := vm.NewObject()
+
+	err := jsHackerTo(jsHackerFrom(v), obj, vm)
+	if err != nil {
+		panic(err)
+	}
+
+	return obj
+}
+
+// jsHipster is the go binding for the JavaScript Hipster type.
+//
+// TSDoc:
+// API to generate hipster words, phrases and paragraphs.
+type jsHipster interface {
+	// wordMethod is the go binding for the JavaScript word method.
+	//
+	// TSDoc:
+	// Generates a single hipster word.
+	wordMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value
+
+	// sentenceMethod is the go binding for the JavaScript sentence method.
+	//
+	// TSDoc:
+	// Generates a random hipster sentence.
+	sentenceMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value
+
+	// paragraphMethod is the go binding for the JavaScript paragraph method.
+	//
+	// TSDoc:
+	// Generates a random hipster paragraphs.
+	paragraphMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value
+}
+
+// goHipster is the go representation of the JavaScript Hipster type.
+//
+// TSDoc:
+// API to generate hipster words, phrases and paragraphs.
+type goHipster interface {
+	// wordMethod is the go representation of the word method.
+	//
+	// TSDoc:
+	// Generates a single hipster word.
+	wordMethod() (string, error)
+
+	// sentenceMethod is the go representation of the sentence method.
+	//
+	// TSDoc:
+	// Generates a random hipster sentence.
+	sentenceMethod(wordCountArg int) (string, error)
+
+	// paragraphMethod is the go representation of the paragraph method.
+	//
+	// TSDoc:
+	// Generates a random hipster paragraphs.
+	paragraphMethod(paragraphCountArg int, sentenceCountArg int, wordCountArg int, separatorArg string) (string, error)
+}
+
+// jsHipsterAdapter converts goHipster to jsHipster.
+type jsHipsterAdapter struct {
+	adaptee goHipster
+}
+
+var _ jsHipster = (*jsHipsterAdapter)(nil)
+
+// wordMethod is a jsHipster adapter method.
+func (self *jsHipsterAdapter) wordMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value {
+	v, err := self.adaptee.wordMethod()
+	if err != nil {
+		panic(err)
+	}
+
+	return vm.ToValue(v)
+}
+
+// sentenceMethod is a jsHipster adapter method.
+func (self *jsHipsterAdapter) sentenceMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value {
+	v, err := self.adaptee.sentenceMethod(int(call.Argument(0).ToInteger()))
+	if err != nil {
+		panic(err)
+	}
+
+	return vm.ToValue(v)
+}
+
+// paragraphMethod is a jsHipster adapter method.
+func (self *jsHipsterAdapter) paragraphMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value {
+	v, err := self.adaptee.paragraphMethod(int(call.Argument(0).ToInteger()), int(call.Argument(1).ToInteger()), int(call.Argument(2).ToInteger()), call.Argument(3).String())
+	if err != nil {
+		panic(err)
+	}
+
+	return vm.ToValue(v)
+}
+
+// goHipsterAdapter converts goja Object to goHipster.
+type goHipsterAdapter struct {
+	adaptee *goja.Object
+	vm      *goja.Runtime
+}
+
+var _ goHipster = (*goHipsterAdapter)(nil)
+
+// wordMethod is a word adapter method.
+func (self *goHipsterAdapter) wordMethod() (string, error) {
+	fun, ok := goja.AssertFunction(self.adaptee.Get("word"))
+	if !ok {
+		return "", fmt.Errorf("%w: word", errors.ErrUnsupported)
+	}
+
+	res, err := fun(self.adaptee)
+	if err != nil {
+		return "", err
+	}
+
+	return res.String(), nil
+}
+
+// sentenceMethod is a sentence adapter method.
+func (self *goHipsterAdapter) sentenceMethod(wordCountArg int) (string, error) {
+	fun, ok := goja.AssertFunction(self.adaptee.Get("sentence"))
+	if !ok {
+		return "", fmt.Errorf("%w: sentence", errors.ErrUnsupported)
+	}
+
+	res, err := fun(self.adaptee)
+	if err != nil {
+		return "", err
+	}
+
+	return res.String(), nil
+}
+
+// paragraphMethod is a paragraph adapter method.
+func (self *goHipsterAdapter) paragraphMethod(paragraphCountArg int, sentenceCountArg int, wordCountArg int, separatorArg string) (string, error) {
+	fun, ok := goja.AssertFunction(self.adaptee.Get("paragraph"))
+	if !ok {
+		return "", fmt.Errorf("%w: paragraph", errors.ErrUnsupported)
+	}
+
+	res, err := fun(self.adaptee)
+	if err != nil {
+		return "", err
+	}
+
+	return res.String(), nil
+}
+
+// jsHipsterTo setup Hipster JavaScript object from jsHipster.
+func jsHipsterTo(src jsHipster, obj *goja.Object, vm *goja.Runtime) error {
+	if err := obj.Set("word", src.wordMethod); err != nil {
+		return err
+	}
+
+	if err := obj.Set("sentence", src.sentenceMethod); err != nil {
+		return err
+	}
+
+	return obj.Set("paragraph", src.paragraphMethod)
+}
+
+// jsHipsterFrom returns a jsHipster based on a goHipster.
+func jsHipsterFrom(adaptee goHipster) jsHipster {
+	return &jsHipsterAdapter{adaptee: adaptee}
+}
+
+// goHipsterFrom returns a goHipster from goja Object.
+func goHipsterFrom(adaptee *goja.Object, vm *goja.Runtime) goHipster {
+	return &goHipsterAdapter{adaptee: adaptee, vm: vm}
+}
+
+// goHipsterToObject returns a goja Object from goHipster.
+func goHipsterToObject(v goHipster, vm *goja.Runtime) *goja.Object {
+	obj := vm.NewObject()
+
+	err := jsHipsterTo(jsHipsterFrom(v), obj, vm)
+	if err != nil {
+		panic(err)
+	}
+
+	return obj
+}
+
+// jsLorem is the go binding for the JavaScript Lorem type.
+//
+// TSDoc:
+// API to generate random words, sentences, paragraphs, questions and quotes.
+type jsLorem interface {
+	// paragraphMethod is the go binding for the JavaScript paragraph method.
+	//
+	// TSDoc:
+	// Generates the given number of paragraphs.
+	paragraphMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value
+
+	// sentenceMethod is the go binding for the JavaScript sentence method.
+	//
+	// TSDoc:
+	// Generates a space separated list of words beginning with a capital letter and ending with a period.
+	sentenceMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value
+
+	// wordMethod is the go binding for the JavaScript word method.
+	//
+	// TSDoc:
+	// Generates a random word.
+	wordMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value
+
+	// questionMethod is the go binding for the JavaScript question method.
+	//
+	// TSDoc:
+	// Generates a random question.
+	questionMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value
+
+	// quoteMethod is the go binding for the JavaScript quote method.
+	//
+	// TSDoc:
+	// Generates a random quote from a random person.
+	quoteMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value
+}
+
+// goLorem is the go representation of the JavaScript Lorem type.
+//
+// TSDoc:
+// API to generate random words, sentences, paragraphs, questions and quotes.
+type goLorem interface {
+	// paragraphMethod is the go representation of the paragraph method.
+	//
+	// TSDoc:
+	// Generates the given number of paragraphs.
+	paragraphMethod(paragraphCountArg int, sentenceCountArg int, wordCountArg int, separatorArg string) (string, error)
+
+	// sentenceMethod is the go representation of the sentence method.
+	//
+	// TSDoc:
+	// Generates a space separated list of words beginning with a capital letter and ending with a period.
+	sentenceMethod(wordCountArg int) (string, error)
+
+	// wordMethod is the go representation of the word method.
+	//
+	// TSDoc:
+	// Generates a random word.
+	wordMethod() (string, error)
+
+	// questionMethod is the go representation of the question method.
+	//
+	// TSDoc:
+	// Generates a random question.
+	questionMethod() (string, error)
+
+	// quoteMethod is the go representation of the quote method.
+	//
+	// TSDoc:
+	// Generates a random quote from a random person.
+	quoteMethod() (string, error)
+}
+
+// jsLoremAdapter converts goLorem to jsLorem.
+type jsLoremAdapter struct {
+	adaptee goLorem
+}
+
+var _ jsLorem = (*jsLoremAdapter)(nil)
+
+// paragraphMethod is a jsLorem adapter method.
+func (self *jsLoremAdapter) paragraphMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value {
+	v, err := self.adaptee.paragraphMethod(int(call.Argument(0).ToInteger()), int(call.Argument(1).ToInteger()), int(call.Argument(2).ToInteger()), call.Argument(3).String())
+	if err != nil {
+		panic(err)
+	}
+
+	return vm.ToValue(v)
+}
+
+// sentenceMethod is a jsLorem adapter method.
+func (self *jsLoremAdapter) sentenceMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value {
+	v, err := self.adaptee.sentenceMethod(int(call.Argument(0).ToInteger()))
+	if err != nil {
+		panic(err)
+	}
+
+	return vm.ToValue(v)
+}
+
+// wordMethod is a jsLorem adapter method.
+func (self *jsLoremAdapter) wordMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value {
+	v, err := self.adaptee.wordMethod()
+	if err != nil {
+		panic(err)
+	}
+
+	return vm.ToValue(v)
+}
+
+// questionMethod is a jsLorem adapter method.
+func (self *jsLoremAdapter) questionMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value {
+	v, err := self.adaptee.questionMethod()
+	if err != nil {
+		panic(err)
+	}
+
+	return vm.ToValue(v)
+}
+
+// quoteMethod is a jsLorem adapter method.
+func (self *jsLoremAdapter) quoteMethod(call goja.FunctionCall, vm *goja.Runtime) goja.Value {
+	v, err := self.adaptee.quoteMethod()
+	if err != nil {
+		panic(err)
+	}
+
+	return vm.ToValue(v)
+}
+
+// goLoremAdapter converts goja Object to goLorem.
+type goLoremAdapter struct {
+	adaptee *goja.Object
+	vm      *goja.Runtime
+}
+
+var _ goLorem = (*goLoremAdapter)(nil)
+
+// paragraphMethod is a paragraph adapter method.
+func (self *goLoremAdapter) paragraphMethod(paragraphCountArg int, sentenceCountArg int, wordCountArg int, separatorArg string) (string, error) {
+	fun, ok := goja.AssertFunction(self.adaptee.Get("paragraph"))
+	if !ok {
+		return "", fmt.Errorf("%w: paragraph", errors.ErrUnsupported)
+	}
+
+	res, err := fun(self.adaptee)
+	if err != nil {
+		return "", err
+	}
+
+	return res.String(), nil
+}
+
+// sentenceMethod is a sentence adapter method.
+func (self *goLoremAdapter) sentenceMethod(wordCountArg int) (string, error) {
+	fun, ok := goja.AssertFunction(self.adaptee.Get("sentence"))
+	if !ok {
+		return "", fmt.Errorf("%w: sentence", errors.ErrUnsupported)
+	}
+
+	res, err := fun(self.adaptee)
+	if err != nil {
+		return "", err
+	}
+
+	return res.String(), nil
+}
+
+// wordMethod is a word adapter method.
+func (self *goLoremAdapter) wordMethod() (string, error) {
+	fun, ok := goja.AssertFunction(self.adaptee.Get("word"))
+	if !ok {
+		return "", fmt.Errorf("%w: word", errors.ErrUnsupported)
+	}
+
+	res, err := fun(self.adaptee)
+	if err != nil {
+		return "", err
+	}
+
+	return res.String(), nil
+}
+
+// questionMethod is a question adapter method.
+func (self *goLoremAdapter) questionMethod() (string, error) {
+	fun, ok := goja.AssertFunction(self.adaptee.Get("question"))
+	if !ok {
+		return "", fmt.Errorf("%w: question", errors.ErrUnsupported)
+	}
+
+	res, err := fun(self.adaptee)
+	if err != nil {
+		return "", err
+	}
+
+	return res.String(), nil
+}
+
+// quoteMethod is a quote adapter method.
+func (self *goLoremAdapter) quoteMethod() (string, error) {
+	fun, ok := goja.AssertFunction(self.adaptee.Get("quote"))
+	if !ok {
+		return "", fmt.Errorf("%w: quote", errors.ErrUnsupported)
+	}
+
+	res, err := fun(self.adaptee)
+	if err != nil {
+		return "", err
+	}
+
+	return res.String(), nil
+}
+
+// jsLoremTo setup Lorem JavaScript object from jsLorem.
+func jsLoremTo(src jsLorem, obj *goja.Object, vm *goja.Runtime) error {
+	if err := obj.Set("paragraph", src.paragraphMethod); err != nil {
+		return err
+	}
+
+	if err := obj.Set("sentence", src.sentenceMethod); err != nil {
+		return err
+	}
+
+	if err := obj.Set("word", src.wordMethod); err != nil {
+		return err
+	}
+
+	if err := obj.Set("question", src.questionMethod); err != nil {
+		return err
+	}
+
+	return obj.Set("quote", src.quoteMethod)
+}
+
+// jsLoremFrom returns a jsLorem based on a goLorem.
+func jsLoremFrom(adaptee goLorem) jsLorem {
+	return &jsLoremAdapter{adaptee: adaptee}
+}
+
+// goLoremFrom returns a goLorem from goja Object.
+func goLoremFrom(adaptee *goja.Object, vm *goja.Runtime) goLorem {
+	return &goLoremAdapter{adaptee: adaptee, vm: vm}
+}
+
+// goLoremToObject returns a goja Object from goLorem.
+func goLoremToObject(v goLorem, vm *goja.Runtime) *goja.Object {
+	obj := vm.NewObject()
+
+	err := jsLoremTo(jsLoremFrom(v), obj, vm)
 	if err != nil {
 		panic(err)
 	}

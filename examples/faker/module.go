@@ -34,8 +34,12 @@ func (self *goModuleImpl) newFaker(seedArg int64) (goFaker, error) {
 	fakeit := gofakeit.NewCustom(src)
 
 	return &goFakerImpl{
-		fakeit: fakeit,
-		person: &goPersonImpl{fakeit: fakeit},
+		fakeit:  fakeit,
+		person:  &goPersonImpl{fakeit: fakeit},
+		company: &goCompanyImpl{fakeit: fakeit},
+		lorem:   &goLoremImpl{fakeit: fakeit},
+		hacker:  &goHackerImpl{fakeit: fakeit},
+		hipster: &goHipsterImpl{fakeit: fakeit},
 	}, nil
 }
 
