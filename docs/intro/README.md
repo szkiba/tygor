@@ -314,6 +314,7 @@ faker.d.ts
 ```
 
 see also [examples/faker](https://github.com/szkiba/tygor/tree/master/examples/faker)
+or live [faker example API docs](https://ivan.szkiba.hu/tygor/intro/faker/)
 
 <!--
 
