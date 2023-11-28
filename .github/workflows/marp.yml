@@ -9,6 +9,8 @@ on:
       - intro
     paths:
       - "docs/**"
+      - "examples/faker/index.html"
+      - ".github/workflows/marp.yml"
 
 jobs:
   deploy:
@@ -34,7 +36,7 @@ jobs:
       - name: Ensure intro/faker dir exists
         run: mkdir -p build/docs/intro/faker
       - name: Copy faker HTML docs to intro/faker dir
-        run: cp examples/faker/index.html build/docs/intro/faker
+        run: cp examples/faker/index.html build/docs/intro/faker/
       # END: intro
 
       - name: Setup Pages
