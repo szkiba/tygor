@@ -31,6 +31,10 @@ jobs:
           args: docs/intro/README.md -o build/docs/intro/index.html
         env:
           MARP_USER: root:root
+      - name: Ensure intro/faker dir exists
+        run: mkdir -p build/docs/intro/faker
+      - name: Copy faker HTML docs to intro/faker dir
+        run: cp examples/faker/index.html build/docs/intro/faker
       # END: intro
 
       - name: Setup Pages
