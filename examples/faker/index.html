@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.4.0/github-markdown.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.18.2/tocbot.css" />
     <style>
       .markdown-body {
         box-sizing: border-box;
@@ -13,15 +14,33 @@
         padding: 45px;
       }
 
+      div.js-toc {
+        position: fixed;
+        left: 1rem;
+        top: 1rem;
+      }
+
+      .js-toc ul {
+        list-style: none;
+        padding-left: 0.8em;
+      }
+
       @media (max-width: 767px) {
         .markdown-body {
           padding: 15px;
+        }
+      }
+
+      @media (max-width: 1280px) {
+        .js-toc {
+          display: none;
         }
       }
     </style>
     <title>k6/x/faker</title>
   </head>
   <body class="markdown-body">
+    <div class="js-toc"></div>
 <!-- begin:api -->
 <h1 id="k6-x-faker">k6/x/faker</h1>
 
@@ -72,11 +91,39 @@ const semiRandomFaker = new Faker()
 <pre><code class="language-ts">readonly person: Person;
 </code></pre>
 
-<p>Module to generate people's personal information such as names and job titles.</p>
+<p>API to generate people's personal information such as names and job titles.</p>
+
+<h3 id="faker-company">Faker.company</h3>
+
+<pre><code class="language-ts">readonly company: Company;
+</code></pre>
+
+<p>API to generate company related entries.</p>
+
+<h3 id="faker-hacker">Faker.hacker</h3>
+
+<pre><code class="language-ts">readonly hacker: Hacker;
+</code></pre>
+
+<p>API to generate hacker/IT words and phrases.</p>
+
+<h3 id="faker-hipster">Faker.hipster</h3>
+
+<pre><code class="language-ts">readonly hipster: Hipster;
+</code></pre>
+
+<p>API to generate hipster words, phrases and paragraphs.</p>
+
+<h3 id="faker-lorem">Faker.lorem</h3>
+
+<pre><code class="language-ts">readonly lorem: Lorem;
+</code></pre>
+
+<p>API to generate random words, sentences, paragraphs, questions and quotes.</p>
 
 <h2 id="person">Person</h2>
 
-<p>Module to generate people's personal information such as names and job titles.</p>
+<p>API to generate people's personal information such as names and job titles.</p>
 
 <h3 id="person-firstname">Person.firstName()</h3>
 
@@ -205,8 +252,348 @@ faker.person.jobLevel() // 'Identity'
 
 faker.person.jobDescriptor() // 'Internal'
 </code></pre>
+
+<h2 id="company">Company</h2>
+
+<p>API to generate company related entries.</p>
+
+<h3 id="company-name">Company.name()</h3>
+
+<pre><code class="language-ts">name(): string;
+</code></pre>
+
+<p>Generates a random company name string.</p>
+
+<p><em>Returns a random company name string</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.company.name() // 'Xatori'
+</code></pre>
+
+<h3 id="company-suffix">Company.suffix()</h3>
+
+<pre><code class="language-ts">suffix(): string;
+</code></pre>
+
+<p>Generates a random company suffix string.</p>
+
+<p><em>Returns a random company suffix string</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.company.suffix() // 'LLC'
+</code></pre>
+
+<h3 id="company-buzzword">Company.buzzWord()</h3>
+
+<pre><code class="language-ts">buzzWord(): string;
+</code></pre>
+
+<p>Generates a random company buzz word string.</p>
+
+<p><em>Returns a random company buzz word string</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.company.buzzWord() // 'Reverse-engineered'
+</code></pre>
+
+<h3 id="company-bs">Company.bs()</h3>
+
+<pre><code class="language-ts">bs(): string;
+</code></pre>
+
+<p>Generates a random company bs string.</p>
+
+<p><em>Returns a random company bs string</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.company.bs() // '24-7'
+</code></pre>
+
+<h2 id="hacker">Hacker</h2>
+
+<p>API to generate hacker/IT words and phrases.</p>
+
+<h3 id="hacker-abbreviation">Hacker.abbreviation()</h3>
+
+<pre><code class="language-ts">abbreviation(): string;
+</code></pre>
+
+<p>Generates a random hacker/IT abbreviation.</p>
+
+<p><em>Returns a random hacker/IT abbreviation</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.hacker.abbreviation() // 'Xatori'
+</code></pre>
+
+<h3 id="hacker-adjective">Hacker.adjective()</h3>
+
+<pre><code class="language-ts">adjective(): string;
+</code></pre>
+
+<p>Generates a random hacker/IT adjective.</p>
+
+<p><em>Returns a random hacker/IT adjective</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.hacker.adjective() // 'Xatori'
+</code></pre>
+
+<h3 id="hacker-ingverb">Hacker.ingverb()</h3>
+
+<pre><code class="language-ts">ingverb(): string;
+</code></pre>
+
+<p>Generates a random hacker/IT verb for continuous actions (en: ing suffix; e.g. hacking).</p>
+
+<p><em>Returns a random hacker/IT verb for continuous actions</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.hacker.ingverb() // 'Xatori'
+</code></pre>
+
+<h3 id="hacker-noun">Hacker.noun()</h3>
+
+<pre><code class="language-ts">noun(): string;
+</code></pre>
+
+<p>Generates a random hacker/IT noun.</p>
+
+<p><em>Returns a random hacker/IT noun</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.hacker.noun() // 'Xatori'
+</code></pre>
+
+<h3 id="hacker-phrase">Hacker.phrase()</h3>
+
+<pre><code class="language-ts">phrase(): string;
+</code></pre>
+
+<p>Generates a random hacker/IT phrase.</p>
+
+<p><em>Returns a random hacker/IT phrase</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.hacker.phrase() // 'Xatori'
+</code></pre>
+
+<h3 id="hacker-verb">Hacker.verb()</h3>
+
+<pre><code class="language-ts">verb(): string;
+</code></pre>
+
+<p>Generates a random hacker/IT verb.</p>
+
+<p><em>Returns a random hacker/IT verb</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.hacker.verb() // 'Xatori'
+</code></pre>
+
+<h2 id="hipster">Hipster</h2>
+
+<p>API to generate hipster words, phrases and paragraphs.</p>
+
+<h3 id="hipster-word">Hipster.word()</h3>
+
+<pre><code class="language-ts">word(): string;
+</code></pre>
+
+<p>Generates a single hipster word.</p>
+
+<p><em>Returns a single hipster word</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.hipster.word() // 'Xatori'
+</code></pre>
+
+<h3 id="hipster-sentence">Hipster.sentence()</h3>
+
+<pre><code class="language-ts">sentence(wordCount: int): string;
+</code></pre>
+
+<ul>
+<li><code>wordCount</code> the number of words</li>
+</ul>
+
+<p>Generates a random hipster sentence.</p>
+
+<p><em>Returns a random hipster sentence</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.hipster.sentence(4) // 'Xatori'
+</code></pre>
+
+<h3 id="hipster-paragraph">Hipster.paragraph()</h3>
+
+<pre><code class="language-ts">paragraph(paragraphCount: int, sentenceCount: int, wordCount: int, separator: string): string;
+</code></pre>
+
+<ul>
+<li><p><code>paragraphCount</code> the number of paragraphs to generate</p></li>
+
+<li><p><code>sentenceCount</code> the number of sentences to generate</p></li>
+
+<li><p><code>wordCount</code> the number of words, that should be in the sentence</p></li>
+
+<li><p><code>separator</code> the paragraph separator</p></li>
+</ul>
+
+<p>Generates a random hipster paragraphs.</p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.hipster.paragraph(1, 2, 4, &quot;\n&quot;) // 'Xatori'
+</code></pre>
+
+<h2 id="lorem">Lorem</h2>
+
+<p>API to generate random words, sentences, paragraphs, questions and quotes.</p>
+
+<h3 id="lorem-paragraph">Lorem.paragraph()</h3>
+
+<pre><code class="language-ts">paragraph(paragraphCount: int, sentenceCount: int, wordCount: int, separator: string): string;
+</code></pre>
+
+<ul>
+<li><p><code>paragraphCount</code> the number of paragraphs to generate</p></li>
+
+<li><p><code>sentenceCount</code> the number of sentences to generate</p></li>
+
+<li><p><code>wordCount</code> the number of words, that should be in the sentence</p></li>
+
+<li><p><code>separator</code> the paragraph separator</p></li>
+</ul>
+
+<p>Generates the given number of paragraphs.</p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.lorem.paragraph(1, 2, 4, &quot;\n&quot;) // 'It regularly hourly stairs. Stack poorly twist troop.'
+</code></pre>
+
+<h3 id="lorem-sentence">Lorem.sentence()</h3>
+
+<pre><code class="language-ts">sentence(wordCount: int): string;
+</code></pre>
+
+<ul>
+<li><code>wordCount</code> the number of words</li>
+</ul>
+
+<p>Generates a space separated list of words beginning with a capital letter and ending with a period.</p>
+
+<p><em>Returns a random sentence</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.lorem.sentence(4) // 'It regularly hourly stairs.'
+</code></pre>
+
+<h3 id="lorem-word">Lorem.word()</h3>
+
+<pre><code class="language-ts">word(): string;
+</code></pre>
+
+<p>Generates a random word.</p>
+
+<p><em>Returns a random word</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.lorem.word() // 'it'
+</code></pre>
+
+<h3 id="lorem-question">Lorem.question()</h3>
+
+<pre><code class="language-ts">question(): string;
+</code></pre>
+
+<p>Generates a random question.</p>
+
+<p><em>Returns a random question</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.lorem.question() // 'Forage pinterest direct trade pug skateboard food truck flannel cold-pressed?'
+</code></pre>
+
+<h3 id="lorem-quote">Lorem.quote()</h3>
+
+<pre><code class="language-ts">quote(): string;
+</code></pre>
+
+<p>Generates a random quote from a random person.</p>
+
+<p><em>Returns a random quote from a random person</em></p>
+
+<p><em>Example</em></p>
+
+<pre><code class="language-ts">const faker = new Faker(11)
+
+faker.lorem.quote() // '&quot;Forage pinterest direct trade pug skateboard food truck flannel cold-pressed.&quot; - Lukas Ledner'
+</code></pre>
 <!-- end:api -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.18.2/tocbot.min.js"></script>
+    <script>
+      tocbot.init({
+        tocSelector: ".js-toc",
+        contentSelector: ".markdown-body",
+        headingSelector: "h2,h3",
+        orderedList: false,
+        scrollSmooth: false,
+        disableTocScrollSync: true,
+        collapseDepth: 2,
+      });
+    </script>
   </body>
 </html>

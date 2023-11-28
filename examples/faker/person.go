@@ -1,8 +1,6 @@
 package faker
 
-import (
-	"github.com/brianvoe/gofakeit/v6"
-)
+import "github.com/brianvoe/gofakeit/v6"
 
 type goPersonImpl struct {
 	fakeit *gofakeit.Faker

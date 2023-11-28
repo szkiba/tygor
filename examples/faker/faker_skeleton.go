@@ -43,6 +43,26 @@ func (self *goFakerImpl) personGetter() (goPerson, error) {
 	return nil, errors.ErrUnsupported
 }
 
+// companyGetter is a goFaker property getter method implementation.
+func (self *goFakerImpl) companyGetter() (goCompany, error) {
+	return nil, errors.ErrUnsupported
+}
+
+// hackerGetter is a goFaker property getter method implementation.
+func (self *goFakerImpl) hackerGetter() (goHacker, error) {
+	return nil, errors.ErrUnsupported
+}
+
+// hipsterGetter is a goFaker property getter method implementation.
+func (self *goFakerImpl) hipsterGetter() (goHipster, error) {
+	return nil, errors.ErrUnsupported
+}
+
+// loremGetter is a goFaker property getter method implementation.
+func (self *goFakerImpl) loremGetter() (goLorem, error) {
+	return nil, errors.ErrUnsupported
+}
+
 // goPersonImpl is an empty implementation of goPerson.
 type goPersonImpl struct{}
 
@@ -85,5 +105,115 @@ func (self *goPersonImpl) jobLevelMethod() (string, error) {
 
 // jobDescriptorMethod is a goPerson method implementation.
 func (self *goPersonImpl) jobDescriptorMethod() (string, error) {
+	return "", errors.ErrUnsupported
+}
+
+// goCompanyImpl is an empty implementation of goCompany.
+type goCompanyImpl struct{}
+
+var _ goCompany = (*goCompanyImpl)(nil)
+
+// nameMethod is a goCompany method implementation.
+func (self *goCompanyImpl) nameMethod() (string, error) {
+	return "", errors.ErrUnsupported
+}
+
+// suffixMethod is a goCompany method implementation.
+func (self *goCompanyImpl) suffixMethod() (string, error) {
+	return "", errors.ErrUnsupported
+}
+
+// buzzWordMethod is a goCompany method implementation.
+func (self *goCompanyImpl) buzzWordMethod() (string, error) {
+	return "", errors.ErrUnsupported
+}
+
+// bsMethod is a goCompany method implementation.
+func (self *goCompanyImpl) bsMethod() (string, error) {
+	return "", errors.ErrUnsupported
+}
+
+// goHackerImpl is an empty implementation of goHacker.
+type goHackerImpl struct{}
+
+var _ goHacker = (*goHackerImpl)(nil)
+
+// abbreviationMethod is a goHacker method implementation.
+func (self *goHackerImpl) abbreviationMethod() (string, error) {
+	return "", errors.ErrUnsupported
+}
+
+// adjectiveMethod is a goHacker method implementation.
+func (self *goHackerImpl) adjectiveMethod() (string, error) {
+	return "", errors.ErrUnsupported
+}
+
+// ingverbMethod is a goHacker method implementation.
+func (self *goHackerImpl) ingverbMethod() (string, error) {
+	return "", errors.ErrUnsupported
+}
+
+// nounMethod is a goHacker method implementation.
+func (self *goHackerImpl) nounMethod() (string, error) {
+	return "", errors.ErrUnsupported
+}
+
+// phraseMethod is a goHacker method implementation.
+func (self *goHackerImpl) phraseMethod() (string, error) {
+	return "", errors.ErrUnsupported
+}
+
+// verbMethod is a goHacker method implementation.
+func (self *goHackerImpl) verbMethod() (string, error) {
+	return "", errors.ErrUnsupported
+}
+
+// goHipsterImpl is an empty implementation of goHipster.
+type goHipsterImpl struct{}
+
+var _ goHipster = (*goHipsterImpl)(nil)
+
+// wordMethod is a goHipster method implementation.
+func (self *goHipsterImpl) wordMethod() (string, error) {
+	return "", errors.ErrUnsupported
+}
+
+// sentenceMethod is a goHipster method implementation.
+func (self *goHipsterImpl) sentenceMethod(wordCountArg int) (string, error) {
+	return "", errors.ErrUnsupported
+}
+
+// paragraphMethod is a goHipster method implementation.
+func (self *goHipsterImpl) paragraphMethod(paragraphCountArg int, sentenceCountArg int, wordCountArg int, separatorArg string) (string, error) {
+	return "", errors.ErrUnsupported
+}
+
+// goLoremImpl is an empty implementation of goLorem.
+type goLoremImpl struct{}
+
+var _ goLorem = (*goLoremImpl)(nil)
+
+// paragraphMethod is a goLorem method implementation.
+func (self *goLoremImpl) paragraphMethod(paragraphCountArg int, sentenceCountArg int, wordCountArg int, separatorArg string) (string, error) {
+	return "", errors.ErrUnsupported
+}
+
+// sentenceMethod is a goLorem method implementation.
+func (self *goLoremImpl) sentenceMethod(wordCountArg int) (string, error) {
+	return "", errors.ErrUnsupported
+}
+
+// wordMethod is a goLorem method implementation.
+func (self *goLoremImpl) wordMethod() (string, error) {
+	return "", errors.ErrUnsupported
+}
+
+// questionMethod is a goLorem method implementation.
+func (self *goLoremImpl) questionMethod() (string, error) {
+	return "", errors.ErrUnsupported
+}
+
+// quoteMethod is a goLorem method implementation.
+func (self *goLoremImpl) quoteMethod() (string, error) {
 	return "", errors.ErrUnsupported
 }
