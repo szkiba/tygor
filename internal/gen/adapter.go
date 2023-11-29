@@ -274,7 +274,7 @@ func (c *coder) goToObjectCode(out *jen.Group) {
 }
 
 func (c *coder) jsConstructorCode(out *jen.Group) {
-	ctor := newCoder(c.src.Constructors[0], c.naming)
+	ctor := newCoder(c.constructor(), c.naming)
 
 	rem(out, "%s creates new %s instance.", c.as(goConstructor), c.as(goInterface))
 	out.Type().
@@ -303,7 +303,7 @@ func (c *coder) jsConstructorCode(out *jen.Group) {
 						Id("ctor").
 						CallFunc(func(g *jen.Group) {
 							idx := 0
-							c.foreach(c.src.Constructors[0].Parameters, func(p *coder) {
+							c.foreach(ctor.src.Parameters, func(p *coder) {
 								g.Add(
 									p.asValueToCall(
 										jen.Id("call").Dot("Argument").Call(jen.Lit(idx)),

@@ -243,3 +243,14 @@ func (c *coder) asZero() *jen.Statement {
 
 	return jen.Id(value)
 }
+
+func (c *coder) constructor() *idl.Declaration {
+	if len(c.src.Constructors) == 0 {
+		ctor := new(idl.Declaration)
+		ctor.Kind = idl.KindConstructor
+
+		return ctor
+	}
+
+	return c.src.Constructors[0]
+}
