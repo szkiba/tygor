@@ -1,6 +1,7 @@
 package doc
 
 import (
+	"errors"
 	"fmt"
 	"regexp"
 )
@@ -25,5 +26,12 @@ func Inject(target []byte, name string, source []byte) ([]byte, error) {
 	tmp = append(tmp, source...)
 	tmp = append(tmp, []byte(end)...)
 
+	if !re.Match(target) {
+		return nil, ErrMissingMarker
+	}
+
 	return re.ReplaceAll(target, tmp), nil
 }
+
+// ErrMissingMarker returned by Inject when no marker comment was found.
+var ErrMissingMarker = errors.New("missing marker comment")

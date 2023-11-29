@@ -11,6 +11,7 @@ import (
 
 	"github.com/spf13/cobra/doc"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestDocs(t *testing.T) {
@@ -43,7 +44,7 @@ func TestDocs(t *testing.T) {
 	assert.NoError(t, err)
 
 	res, err := xdoc.Inject(src, "cli", buff.Bytes())
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.NoError(t, os.WriteFile(readme, res, 0o600)) //nolint:forbidigo
 }

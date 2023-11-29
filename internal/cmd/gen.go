@@ -40,7 +40,6 @@ The only mandatory argument is the name of the declaration file (which file name
 		Example: "$ " + appname + " gen --skeleton hitchhiker.d.ts",
 		Args:    cobra.ExactArgs(1),
 
-		SilenceUsage:      true,
 		DisableAutoGenTag: true,
 	}
 

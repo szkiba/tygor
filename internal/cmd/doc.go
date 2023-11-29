@@ -39,7 +39,6 @@ The only mandatory argument to the doc subcommand is the name of the declaration
 			return docRun(checkFileSuffix(args[0]), flags)
 		},
 
-		SilenceUsage:      true,
 		DisableAutoGenTag: true,
 	}
 
