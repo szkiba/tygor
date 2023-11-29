@@ -25,7 +25,6 @@ The only mandatory argument of the tygor parse subcommand is the name of the dec
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return parseRun(checkFileSuffix(args[0]), flags)
 		},
-		SilenceUsage:      true,
 		DisableAutoGenTag: true,
 	}
 

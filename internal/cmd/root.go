@@ -33,7 +33,6 @@ Use the -h flag to get detailed help on subcommands and flags.
 		Example:           "$ " + appname + " --skeleton hitchhiker.d.ts",
 		Version:           version,
 		Args:              cobra.ExactArgs(1),
-		SilenceUsage:      true,
 		DisableAutoGenTag: true,
 		CompletionOptions: cobra.CompletionOptions{DisableDefaultCmd: true},
 	}
