@@ -12,6 +12,11 @@ type options struct {
 	templateName string
 	outer        []byte
 	heading      uint
+
+	githubRepo   string
+	linkReleases bool
+	linkPackages bool
+	linkExamples bool
 }
 
 // Option defines a documentation generator option function.
@@ -49,6 +54,34 @@ func WithOuter(outer []byte) Option {
 func WithHeading(heading uint) Option {
 	return func(o *options) {
 		o.heading = heading
+	}
+}
+
+// WithGitHubRepo can be used to specify the GitHub repository in owner/name form.
+func WithGitHubRepo(repo string) Option {
+	return func(o *options) {
+		o.githubRepo = repo
+	}
+}
+
+// WithLinkReleases can be used to enable/disable GitHub releases link.
+func WithLinkReleases(flag bool) Option {
+	return func(o *options) {
+		o.linkReleases = flag
+	}
+}
+
+// WithLinkPackages can be used to enable/disable GitHub container packages link.
+func WithLinkPackages(flag bool) Option {
+	return func(o *options) {
+		o.linkPackages = flag
+	}
+}
+
+// WithLinkExamples can be used to enable/disable examples folder link.
+func WithLinkExamples(flag bool) Option {
+	return func(o *options) {
+		o.linkExamples = flag
 	}
 }
 

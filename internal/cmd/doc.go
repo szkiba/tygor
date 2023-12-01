@@ -4,6 +4,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -31,6 +32,9 @@ API documentation can also be inserted (and updated) into an existing Markdown o
 
 The generated API documentation starts at heading level 1 by default. The starting heading level can be specified by using the --heading flag, which can be useful, for example, when inserting into an outer document.
 
+The documentation may include the usual extension documentation sections, such as build instructions, download instructions, a link to the examples folder, etc. The required GitHub repository can be specified using the --github-repo flag. Otherwise, the tygor doc subcommand tries to guess the GitHub repository from the git configuration (if it exists). This automation can be disabled with the --no-auto flag.
+By default, GitHub repository and generateable boilerplate sections are automatically detected. This is done by examining the git configuration, the GitHub workflows configuration, and the examples directory.
+
 The only mandatory argument to the doc subcommand is the name of the declaration file (which file name must end with a .d.ts suffix).
 `,
 		Example: "$ " + appname + " doc -o README.md hitchhiker.d.ts",
@@ -52,6 +56,16 @@ The only mandatory argument to the doc subcommand is the name of the declaration
 		BoolVar(&flags.html, "html", false, "enable HTML output (default: based on file ext)")
 	cmd.Flags().
 		UintVar(&flags.heading, "heading", 1, "initial heading level")
+	cmd.Flags().
+		StringVar(&flags.githubRepo, "github-repo", "", "GitHub repository (owner/name)")
+	cmd.Flags().
+		BoolVar(&flags.linkReleases, "link-releases", false, "enable GitHub releases link")
+	cmd.Flags().
+		BoolVar(&flags.linkPackages, "link-packages", false, "enable GitHub container packages link")
+	cmd.Flags().
+		BoolVar(&flags.linkExamples, "link-examples", false, "enable examples folder link")
+	cmd.Flags().
+		BoolVar(&flags.noAuto, "no-auto", false, "disable automatic GitHub repo and link flags detection")
 
 	cmd.MarkFlagsMutuallyExclusive("output", "inject")
 
@@ -64,19 +78,21 @@ type docFlags struct {
 	html     bool
 	heading  uint
 	template string
+
+	githubRepo   string
+	linkReleases bool
+	linkPackages bool
+	linkExamples bool
+	noAuto       bool
 }
 
-//nolint:forbidigo
-func docRun(src string, flags *docFlags) error {
-	mod, err := readAndParse(src)
-	if err != nil {
-		return err
+func (flags *docFlags) toOptions() []doc.Option {
+	opts := []doc.Option{
+		doc.WithGitHubRepo(flags.githubRepo),
+		doc.WithLinkReleases(flags.linkReleases),
+		doc.WithLinkPackages(flags.linkPackages),
+		doc.WithLinkExamples(flags.linkExamples),
 	}
-
-	var file *os.File
-	var writer io.Writer
-
-	opts := []doc.Option{}
 
 	if flags.html || isHTML(flags.output) || isHTML(flags.outer) {
 		opts = append(opts, doc.WithFormat(doc.FormatHTML))
@@ -89,6 +105,87 @@ func docRun(src string, flags *docFlags) error {
 		}
 		opts = append(opts, doc.WithHeading(heading))
 	}
+
+	return opts
+}
+
+func exists(filename string) bool {
+	_, err := os.Stat(filename) //nolint:forbidigo
+
+	return err == nil
+}
+
+//nolint:forbidigo
+func (flags *docFlags) autoDetect(from string) {
+	dir, err := filepath.Abs(from)
+	if err != nil {
+		return
+	}
+
+	var filename string
+
+	for {
+		parent := filepath.Dir(dir)
+		if parent == dir {
+			return
+		}
+
+		filename = filepath.Join(dir, ".git", "config")
+		if exists(filename) {
+			break
+		}
+
+		dir = parent
+	}
+
+	if len(flags.githubRepo) == 0 {
+		content, err := os.ReadFile(filepath.Clean(filename))
+		if err != nil {
+			return
+		}
+
+		re := regexp.MustCompile(
+			`(?s)\[remote "origin"\][^[]*url\s*=.*github.com[:]?[/]?([^/]*/[^/.]*)`,
+		)
+
+		all := re.FindSubmatch(content)
+		if all == nil || len(all) <= 1 {
+			return
+		}
+
+		flags.githubRepo = string(all[1])
+	}
+
+	if exists(filepath.Join(dir, "examples")) {
+		flags.linkExamples = true
+	}
+
+	filename = filepath.Join(dir, ".github", "workflows", "release.yml")
+	if exists(filename) {
+		flags.linkReleases = true
+
+		content, err := os.ReadFile(filename)
+		if err == nil && strings.Contains(string(content), "ghcr.io") {
+			flags.linkPackages = true
+		}
+	}
+}
+
+//nolint:forbidigo
+func docRun(src string, flags *docFlags) error {
+	mod, err := readAndParse(src)
+	if err != nil {
+		return err
+	}
+
+	var file *os.File
+	var writer io.Writer
+
+	if !flags.noAuto {
+		flags.autoDetect(filepath.Dir(src))
+	}
+
+	opts := flags.toOptions()
 
 	if len(flags.output) != 0 {
 		file, err = os.Create(flags.output)

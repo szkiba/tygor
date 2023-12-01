@@ -14,7 +14,7 @@ import (
 	"github.com/szkiba/tygor/internal/idl"
 )
 
-type module struct {
+type templateData struct {
 	*idl.Module
 
 	Namespace  *idl.Declaration
@@ -22,30 +22,54 @@ type module struct {
 	Interfaces idl.Declarations
 	Variables  idl.Declarations
 	Functions  idl.Declarations
+
+	GitHub *github
 }
 
-func newModule(mod *idl.Module) *module {
-	self := new(module)
+type github struct {
+	Repo      string
+	Packages  bool
+	Releases  bool
+	Examples  bool
+	RepoName  string
+	RepoOwner string
+}
 
-	self.Module = mod
+func newTemplateData(mod *idl.Module, opts *options) *templateData {
+	data := new(templateData)
+
+	data.Module = mod
+
+	data.GitHub = &github{
+		Repo:     opts.githubRepo,
+		Releases: opts.linkReleases,
+		Packages: opts.linkPackages,
+		Examples: opts.linkExamples,
+	}
+
+	flds := strings.Split(opts.githubRepo, "/")
+	if len(flds) > 1 {
+		data.GitHub.RepoOwner = flds[0]
+		data.GitHub.RepoName = flds[1]
+	}
 
 	for _, dec := range mod.Declarations {
 		switch dec.Kind {
 		case idl.KindNamespace:
-			self.Namespace = dec
+			data.Namespace = dec
 		case idl.KindClass:
-			self.Classes = append(self.Classes, dec)
+			data.Classes = append(data.Classes, dec)
 		case idl.KindInterface:
-			self.Interfaces = append(self.Interfaces, dec)
+			data.Interfaces = append(data.Interfaces, dec)
 		case idl.KindFunction:
-			self.Functions = append(self.Functions, dec)
+			data.Functions = append(data.Functions, dec)
 		case idl.KindVariable:
-			self.Variables = append(self.Variables, dec)
+			data.Variables = append(data.Variables, dec)
 		default:
 		}
 	}
 
-	return self
+	return data
 }
 
 // Generate generates documentation for the module.
@@ -62,7 +86,7 @@ func Generate(mod *idl.Module, options ...Option) ([]byte, error) {
 
 	var buff bytes.Buffer
 
-	if e := t.Execute(&buff, newModule(mod)); e != nil {
+	if e := t.Execute(&buff, newTemplateData(mod, opts)); e != nil {
 		return nil, e
 	}
 

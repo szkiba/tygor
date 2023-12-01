@@ -10,6 +10,9 @@ Import an entire module's contents: `JavaScript import * as TOML from "k6/x/toml
 
 Import a single export from a module: `JavaScript import { parse } from "k6/x/toml";`
 
+API
+===
+
 ### parse()
 
 ```ts

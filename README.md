@@ -448,6 +448,14 @@ generated API documentation goes here
 
 The [default HTML outer document](internal/doc/outer.html) is a good starting point for creating your own HTML outer document.
 
+Documentation for extensions usually includes common sections. For example, how to build k6 with the extension, or download pre-built k6 binaries, etc.
+
+For different extensions, these boilerplate documentation sections differ almost only in the extension name and the repository URL. Consequently, these sections can be easily generated.
+
+The [`doc`](#tygor-doc) subcommand can generate these boilerplate sections if the necessary parameters (eg repository name) are specified or detected. Thus, the extension developer does not have to write these sections, and if the tooling changes (e.g. the xk6 tool changes or improves), they are simply re-generable.
+
+By default, GitHub repository and generateable boilerplate sections are automatically detected. This is done by examining the git configuration, the GitHub workflows configuration, and the examples directory.
+
 **parse**
 
 The [`parse`](#tygor-parse) subcommand simply displays (or writes to a file) the API model in JSON format. With its use, the API model can be processed by external programs without the complexity of TypeScript parsing.
@@ -527,6 +535,9 @@ API documentation can also be inserted (and updated) into an existing Markdown o
 
 The generated API documentation starts at heading level 1 by default. The starting heading level can be specified by using the --heading flag, which can be useful, for example, when inserting into an outer document.
 
+The documentation may include the usual extension documentation sections, such as build instructions, download instructions, a link to the examples folder, etc. The required GitHub repository can be specified using the --github-repo flag. Otherwise, the tygor doc subcommand tries to guess the GitHub repository from the git configuration (if it exists). This automation can be disabled with the --no-auto flag.
+By default, GitHub repository and generateable boilerplate sections are automatically detected. This is done by examining the git configuration, the GitHub workflows configuration, and the examples directory.
+
 The only mandatory argument to the doc subcommand is the name of the declaration file (which file name must end with a .d.ts suffix).
 
 
@@ -543,12 +554,17 @@ $ tygor doc -o README.md hitchhiker.d.ts
 ### Options
 
 ```
-      --heading uint      initial heading level (default 1)
-  -h, --help              help for doc
-      --html              enable HTML output (default: based on file ext)
-  -i, --inject string     inject into outer file
-  -o, --output string     output file (default: standard output)
-  -t, --template string   go template file for markdown generation
+      --github-repo string   GitHub repository (owner/name)
+      --heading uint         initial heading level (default 1)
+  -h, --help                 help for doc
+      --html                 enable HTML output (default: based on file ext)
+  -i, --inject string        inject into outer file
+      --link-examples        enable examples folder link
+      --link-packages        enable GitHub container packages link
+      --link-releases        enable GitHub releases link
+      --no-auto              disable automatic GitHub repo and link flags detection
+  -o, --output string        output file (default: standard output)
+  -t, --template string      go template file for markdown generation
 ```
 
 ### SEE ALSO

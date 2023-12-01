@@ -1,6 +1,9 @@
 k6/x/hitchhiker
 ===============
 
+API
+===
+
 Guide
 -----
 
