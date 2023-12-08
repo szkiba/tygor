@@ -204,7 +204,7 @@ func docRun(src string, flags *docFlags) error {
 
 		opts = append(opts, doc.WithOuter(outer))
 
-		file, err = os.OpenFile(flags.outer, os.O_RDWR, 0o600)
+		file, err = os.OpenFile(flags.outer, os.O_RDWR|os.O_TRUNC, 0o600)
 		if err != nil {
 			return err
 		}
