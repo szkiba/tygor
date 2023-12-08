@@ -5,8 +5,13 @@ Examples:
 $ tygor doc -o README.md hitchhiker.d.ts
 
 Flags:
-      --heading uint      initial heading level (default 1)
-      --html              enable HTML output (default: based on file ext)
-  -i, --inject string     inject into outer file
-  -o, --output string     output file (default: standard output)
-  -t, --template string   go template file for markdown generation
+      --github-repo string   GitHub repository (owner/name)
+      --heading uint         initial heading level (default 1)
+      --html                 enable HTML output (default: based on file ext)
+  -i, --inject string        inject into outer file
+      --link-examples        enable examples folder link
+      --link-packages        enable GitHub container packages link
+      --link-releases        enable GitHub releases link
+      --no-auto              disable automatic GitHub repo and link flags detection
+  -o, --output string        output file (default: standard output)
+  -t, --template string      go template file for markdown generation

@@ -3,6 +3,9 @@ k6/x/faker
 
 xk6-faker random fake data generator
 
+API
+===
+
 Faker
 -----
 
